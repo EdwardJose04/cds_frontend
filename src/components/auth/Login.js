@@ -22,10 +22,12 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-
+    
         try {
             const response = await axios.post('/usuarios/login', formData);
             localStorage.setItem('token', response.data.token);
+            // Guardar datos del usuario
+            localStorage.setItem('userData', JSON.stringify(response.data.usuario));
             navigate('/');
         } catch (err) {
             setError(err.response?.data?.message || 'Error en el inicio de sesión');

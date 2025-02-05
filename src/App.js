@@ -4,27 +4,27 @@ import Register from './components/auth/Register';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Login from './components/auth/Login';
-import ListaUsuarios from './components/usuarios/ListaUsuarios'; // Nuevo import
+import ListaUsuarios from './components/usuarios/ListaUsuarios';
+import Layout from './components/Layout';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/register" element={<Register />} />
+        {/* Rutas públicas */}
         <Route path="/login" element={<Login />} />
-        <Route path="/usuarios" element={
+
+        {/* Rutas protegidas con Layout */}
+        <Route element={
           <ProtectedRoute>
-            <ListaUsuarios />
+            <Layout />
           </ProtectedRoute>
-        } />
-        <Route 
-          path="/" 
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          } 
-        />
+        }>
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/usuarios" element={<ListaUsuarios />} />
+          {/* Aquí puedes agregar más rutas protegidas que usarán el Layout */}
+        </Route>
       </Routes>
     </Router>
   );
