@@ -93,11 +93,9 @@ const ListaUsuarios = () => {
 
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <Sidebar />
   
       {/* Contenido principal */}
-      <div className="flex-1 container mx-auto px-4 py-8 ml-64">
+      <div className="flex-1 container mx-auto px-4 py-8">
         <h2 className="text-3xl font-bold mb-6 text-center">Lista de Usuarios</h2>
   
         {/* Mostrar mensaje de error si existe */}
