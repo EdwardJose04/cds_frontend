@@ -28,7 +28,7 @@ const Login = () => {
             localStorage.setItem('token', response.data.token);
             // Guardar datos del usuario
             localStorage.setItem('userData', JSON.stringify(response.data.usuario));
-            navigate('/');
+            navigate('/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Error en el inicio de sesión');
         }
