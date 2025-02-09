@@ -8,6 +8,8 @@ import ListaUsuarios from './components/usuarios/ListaUsuarios';
 import Layout from './components/Layout';
 import RegistrarHerramienta from './components/herramientas/RegistrarHerramienta';
 import ListaHerramientas from './components/herramientas/ListaHerramientas';
+import RegistrarProducto from './components/productos/RegistrarProducto';
+import ListaProductos from './components/productos/ListaProductos';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="/usuarios" element={<ListaUsuarios />} />
           <Route path="/herramientas/crear" element={<RegistrarHerramienta />} />
           <Route path="/herramientas" element={<ListaHerramientas />} />
+          <Route path="/productos/crear" element={<RegistrarProducto/>} />
+          <Route path="/productos" element={<ListaProductos/>} />
           {/* Aquí puedes agregar más rutas protegidas que usarán el Layout */}
         </Route>
       </Routes>

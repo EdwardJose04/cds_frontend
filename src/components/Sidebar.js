@@ -90,7 +90,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         <div className="flex flex-col h-full">
           {/* Header with toggle button */}
           <div className="flex items-center justify-between p-4">
-            <h1 className="text-xl font-bold">Dashboard</h1>
+            <Link to="/dashboard" className="text-xl font-bold">Menú principal</Link>
             {!isMobileView && (
               <button
                 onClick={() => setIsOpen(!isOpen)}
