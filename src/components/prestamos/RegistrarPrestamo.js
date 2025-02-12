@@ -10,14 +10,15 @@ const RegistrarPrestamo = () => {
         herramienta_id: '',
         responsable: '',
         lugar_uso: '',
-        numero_ticket: ''
+        numero_ticket: '',
+        cantidad: 1  // Añadido el campo cantidad con valor por defecto
     });
     const [cargando, setCargando] = useState(true);
+    const [herramientaSeleccionada, setHerramientaSeleccionada] = useState(null);
 
     useEffect(() => {
         const inicializarFormulario = async () => {
             try {
-                // Obtener número de ticket primero
                 const token = localStorage.getItem('token');
                 console.log('Obteniendo ticket con token:', !!token);
                 
@@ -27,13 +28,11 @@ const RegistrarPrestamo = () => {
                 
                 console.log('Respuesta ticket:', responseTicket.data);
 
-                // Actualizar el número de ticket en el estado
                 setFormData(prev => ({
                     ...prev,
                     numero_ticket: responseTicket.data.numero_ticket
                 }));
 
-                // Obtener herramientas disponibles
                 const responseHerramientas = await axios.get('herramientas');
                 console.log('Herramientas obtenidas:', responseHerramientas.data);
                 
@@ -61,10 +60,37 @@ const RegistrarPrestamo = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         console.log(`Cambiando campo ${name} a:`, value);
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+
+        if (name === 'herramienta_id') {
+            const herramientaEncontrada = herramientas.find(h => h.id === parseInt(value));
+            setHerramientaSeleccionada(herramientaEncontrada);
+            
+            // Resetear la cantidad al cambiar de herramienta
+            setFormData(prev => ({
+                ...prev,
+                [name]: value,
+                cantidad: 1
+            }));
+        } else if (name === 'cantidad') {
+            // Validar que la cantidad no sea mayor que el stock disponible
+            const cantidadNumerica = parseInt(value);
+            if (herramientaSeleccionada && cantidadNumerica > herramientaSeleccionada.cantidad) {
+                setMensaje({
+                    tipo: 'error',
+                    texto: `La cantidad no puede ser mayor que el stock disponible (${herramientaSeleccionada.cantidad})`
+                });
+                return;
+            }
+            setFormData(prev => ({
+                ...prev,
+                [name]: cantidadNumerica
+            }));
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -77,12 +103,22 @@ const RegistrarPrestamo = () => {
         if (!formData.herramienta_id) camposFaltantes.push('herramienta_id');
         if (!formData.responsable) camposFaltantes.push('responsable');
         if (!formData.lugar_uso) camposFaltantes.push('lugar_uso');
+        if (!formData.cantidad || formData.cantidad <= 0) camposFaltantes.push('cantidad');
 
         if (camposFaltantes.length > 0) {
             console.log('Campos faltantes:', camposFaltantes);
             setMensaje({
                 tipo: 'error',
-                texto: `Campos faltantes: ${camposFaltantes.join(', ')}`
+                texto: `Campos faltantes o inválidos: ${camposFaltantes.join(', ')}`
+            });
+            return;
+        }
+
+        // Validar cantidad antes de enviar
+        if (herramientaSeleccionada && formData.cantidad > herramientaSeleccionada.cantidad) {
+            setMensaje({
+                tipo: 'error',
+                texto: `La cantidad solicitada (${formData.cantidad}) supera el stock disponible (${herramientaSeleccionada.cantidad})`
             });
             return;
         }
@@ -103,7 +139,6 @@ const RegistrarPrestamo = () => {
                 texto: 'Préstamo registrado exitosamente'
             });
 
-            // Redireccionar después de un breve delay
             setTimeout(() => navigate('/prestamos'), 1500);
         } catch (error) {
             console.error('Error completo:', error);
@@ -168,10 +203,31 @@ const RegistrarPrestamo = () => {
                         <option value="">Seleccione una herramienta</option>
                         {herramientas.map(herramienta => (
                             <option key={herramienta.id} value={herramienta.id}>
-                                {herramienta.nombre_herramienta}
+                                {herramienta.nombre_herramienta} (Stock: {herramienta.cantidad})
                             </option>
                         ))}
                     </select>
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                        Cantidad
+                    </label>
+                    <input
+                        type="number"
+                        name="cantidad"
+                        value={formData.cantidad}
+                        onChange={handleInputChange}
+                        min="1"
+                        max={herramientaSeleccionada ? herramientaSeleccionada.cantidad : 1}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required
+                    />
+                    {herramientaSeleccionada && (
+                        <p className="text-sm text-gray-600 mt-1">
+                            Stock disponible: {herramientaSeleccionada.cantidad}
+                        </p>
+                    )}
                 </div>
 
                 <div className="mb-4">

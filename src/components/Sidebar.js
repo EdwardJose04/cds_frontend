@@ -8,9 +8,11 @@ import {
   FaChevronUp, 
   FaSignOutAlt, 
   FaBars, 
+  FaClipboardList,
   FaArrowLeft,
-  FaArrowRight 
+  FaArrowRight
 } from "react-icons/fa";
+
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [openMenus, setOpenMenus] = useState({});
@@ -229,7 +231,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   onClick={() => toggleMenu("reportes")}
                 >
                   <span className="flex items-center">
-                    <FaTools className="mr-2" />
+                    <FaClipboardList className="mr-2" />
                     Reportes
                   </span>
                   {openMenus["reportes"] ? <FaChevronUp /> : <FaChevronDown />}
