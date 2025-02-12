@@ -221,6 +221,34 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   </ul>
                 )}
               </li>
+
+              {/* reportes */}
+              <li>
+                <button
+                  className="flex items-center justify-between w-full p-2 hover:bg-gray-700 rounded transition-colors"
+                  onClick={() => toggleMenu("reportes")}
+                >
+                  <span className="flex items-center">
+                    <FaTools className="mr-2" />
+                    Reportes
+                  </span>
+                  {openMenus["reportes"] ? <FaChevronUp /> : <FaChevronDown />}
+                </button>
+                {openMenus["reportes"] && (
+                  <ul className="ml-6 mt-2 space-y-1">
+                    <li>
+                      <Link to="/reportes/crear" className="block p-2 hover:bg-gray-700 rounded transition-colors">
+                        Registrar
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/reportes" className="block p-2 hover:bg-gray-700 rounded transition-colors">
+                        Listado
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
             </ul>
           </nav>
 

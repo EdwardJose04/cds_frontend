@@ -12,6 +12,8 @@ import RegistrarProducto from './components/productos/RegistrarProducto';
 import ListaProductos from './components/productos/ListaProductos';
 import RegistrarPrestamo from './components/prestamos/RegistrarPrestamo';
 import ListaPrestamos from './components/prestamos/ListaPrestamos';
+import RegistrarReporte from './components/reportes/RegistrarReporte';
+import ListaReportes from './components/reportes/ListaReportes';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
           <Route path="/productos" element={<ListaProductos/>} />
           <Route path="/prestamos/solicitar" element={<RegistrarPrestamo/>} />
           <Route path="/prestamos" element={<ListaPrestamos/>} />
+          <Route path="/reportes/crear" element={<RegistrarReporte/>} />
+          <Route path="/reportes" element={<ListaReportes/>} />
           {/* Aquí puedes agregar más rutas protegidas que usarán el Layout */}
         </Route>
       </Routes>
