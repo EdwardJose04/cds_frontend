@@ -92,8 +92,6 @@ const ListaProductos = () => {
     } catch (err) {
       if (err.response?.status === 403) {
         setError("No tienes permiso para actualizar productos");
-      } else if (err.response?.status === 400 && err.response?.data?.message.includes('código')) {
-        setError("Ya existe otro producto con este código");
       } else {
         setError(err.response?.data?.message || "Error al actualizar producto");
       }
@@ -121,7 +119,6 @@ const ListaProductos = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Responsable</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha Ingreso</th>
                 <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
@@ -133,7 +130,6 @@ const ListaProductos = () => {
                   <td className="px-6 py-4 whitespace-nowrap">{producto.id}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{producto.nombre}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{producto.cantidad}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{producto.codigo}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{producto.responsable}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {new Date(producto.fecha_ingreso).toLocaleDateString()}
@@ -197,17 +193,6 @@ const ListaProductos = () => {
                     className="w-full p-2 border rounded"
                     required
                     min="1"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 mb-2">Código</label>
-                  <input
-                    type="text"
-                    name="codigo"
-                    value={editingProducto.codigo}
-                    onChange={handleEditChange}
-                    className="w-full p-2 border rounded"
-                    required
                   />
                 </div>
                 <div>

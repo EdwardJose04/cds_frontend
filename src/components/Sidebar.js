@@ -193,6 +193,34 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   </ul>
                 )}
               </li>
+
+              {/* Prestamos */}
+              <li>
+                <button
+                  className="flex items-center justify-between w-full p-2 hover:bg-gray-700 rounded transition-colors"
+                  onClick={() => toggleMenu("prestamos")}
+                >
+                  <span className="flex items-center">
+                    <FaTools className="mr-2" />
+                    Prestamos
+                  </span>
+                  {openMenus["prestamos"] ? <FaChevronUp /> : <FaChevronDown />}
+                </button>
+                {openMenus["prestamos"] && (
+                  <ul className="ml-6 mt-2 space-y-1">
+                    <li>
+                      <Link to="/prestamos/solicitar" className="block p-2 hover:bg-gray-700 rounded transition-colors">
+                        Registrar
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/prestamos" className="block p-2 hover:bg-gray-700 rounded transition-colors">
+                        Listado
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
             </ul>
           </nav>
 

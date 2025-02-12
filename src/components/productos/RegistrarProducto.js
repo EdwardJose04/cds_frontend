@@ -7,7 +7,6 @@ const RegistrarProducto = () => {
     const [formData, setFormData] = useState({
         nombre: '',
         cantidad: '',
-        codigo: '',
         responsable: ''
     });
     const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +27,7 @@ const RegistrarProducto = () => {
 
         try {
             // Validaciones
-            if (!formData.nombre || !formData.cantidad || !formData.codigo || !formData.responsable) {
+            if (!formData.nombre || !formData.cantidad || !formData.responsable) {
                 setError('Todos los campos son obligatorios');
                 return;
             }
@@ -52,8 +51,6 @@ const RegistrarProducto = () => {
             console.error('Error al registrar el producto:', error);
             if (error.response?.status === 403) {
                 setError('No tienes permiso para registrar productos');
-            } else if (error.response?.status === 400 && error.response?.data?.message.includes('código')) {
-                setError('Ya existe un producto con este código');
             } else {
                 setError(error.response?.data?.message || 'Error al registrar el producto');
             }
@@ -100,20 +97,6 @@ const RegistrarProducto = () => {
                             className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Cantidad"
                             min="1"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Código
-                        </label>
-                        <input
-                            type="text"
-                            name="codigo"
-                            value={formData.codigo}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Código del producto"
                         />
                     </div>
 
