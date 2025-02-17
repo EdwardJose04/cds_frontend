@@ -7,8 +7,8 @@ const RegistrarHerramienta = () => {
     const [formData, setFormData] = useState({
         responsable: '',
         nombre_herramienta: '',
-        cantidad: '',
-        estado: 'En inventario'
+        cantidad_total: '',
+        cantidad_prestamo: '0'
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -28,13 +28,21 @@ const RegistrarHerramienta = () => {
 
         try {
             // Validaciones
-            if (!formData.responsable || !formData.nombre_herramienta || !formData.cantidad) {
-                setError('Todos los campos son obligatorios');
+            if (!formData.responsable || !formData.nombre_herramienta || !formData.cantidad_total) {
+                setError('Los campos responsable, nombre de la herramienta y cantidad total son obligatorios');
+                setIsLoading(false);
                 return;
             }
 
-            if (formData.cantidad <= 0) {
-                setError('La cantidad debe ser mayor a 0');
+            if (parseInt(formData.cantidad_total) <= 0) {
+                setError('La cantidad total debe ser mayor a 0');
+                setIsLoading(false);
+                return;
+            }
+
+            if (parseInt(formData.cantidad_prestamo) > parseInt(formData.cantidad_total)) {
+                setError('La cantidad en préstamo no puede ser mayor que la cantidad total');
+                setIsLoading(false);
                 return;
             }
 
@@ -50,7 +58,15 @@ const RegistrarHerramienta = () => {
 
         } catch (error) {
             console.error('Error al registrar la herramienta:', error);
-            setError(error.response?.data?.message || 'Error al registrar la herramienta');
+            if (error.response?.status === 403) {
+                setError('No tienes permiso para registrar herramientas');
+            } else if (error.response?.status === 401) {
+                setError('Sesión expirada o inválida');
+                // Opcional: redirigir al login
+                // navigate('/login');
+            } else {
+                setError(error.response?.data?.message || 'Error al registrar la herramienta');
+            }
         } finally {
             setIsLoading(false);
         }
@@ -98,32 +114,32 @@ const RegistrarHerramienta = () => {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Cantidad
+                            Cantidad Total
                         </label>
                         <input
                             type="number"
-                            name="cantidad"
-                            value={formData.cantidad}
+                            name="cantidad_total"
+                            value={formData.cantidad_total}
                             onChange={handleChange}
                             className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Cantidad"
+                            placeholder="Cantidad total"
                             min="1"
                         />
                     </div>
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Estado
+                            Cantidad en Préstamo
                         </label>
-                        <select
-                            name="estado"
-                            value={formData.estado}
+                        <input
+                            type="number"
+                            name="cantidad_prestamo"
+                            value={formData.cantidad_prestamo}
                             onChange={handleChange}
                             className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                        >
-                            <option value="En inventario">En inventario</option>
-                            <option value="En prestamo">En préstamo</option>
-                        </select>
+                            placeholder="Cantidad en préstamo"
+                            min="0"
+                        />
                     </div>
 
                     <div className="flex justify-end space-x-4">
